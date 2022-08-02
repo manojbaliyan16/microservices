@@ -8,23 +8,20 @@ import (
 )
 
 func main() {
-
+	fmt.Println("Hello Go world")
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		log.Println("Hello world")
-		// Ready the Body from request
+		fmt.Println("Default handler")
 		d, err := ioutil.ReadAll(r.Body)
+		fmt.Printf("The data is %s\n", d)
 		if err != nil {
-			//	w.WriteHeader(http.StatusBadRequest)
-			//	w.Write([]byte("oops"))
-			http.Error(w, "oops", http.StatusBadRequest)
+			http.Error(w, "oops Error", http.StatusBadRequest)
 			return
 		}
 		fmt.Fprintf(w, "hello %s", d)
-		//log.Printf("Data %s\n", d)
 	})
 	http.HandleFunc("/GoodBye", func(http.ResponseWriter, *http.Request) {
-		log.Println("Good Bye  world")
+		log.Println("Bbye byt to C++ ")
 	})
-	http.ListenAndServe(":9090", nil) // DEFAULT HANDLER
+	http.ListenAndServe(":9090", nil)
 
 }
