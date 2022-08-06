@@ -7,27 +7,30 @@ import (
 	"net/http"
 )
 
+// Hello is a simple handler
 type Hello struct {
 	l *log.Logger
 }
 
-// idematic Principle to define code
-
-// dependency Injection in go for for logger
-// the benifits of the dependency injection is this we can replace l --> *log.Logger woth any orher value
-// helps us to wrote fast unit testing
+// NewHello creates a new hello handler with the given logger
 func NewHello(l *log.Logger) *Hello {
-	return &Hello{}
+	return &Hello{l}
 }
 
-func (h *Hello) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	h.l.Println("Default handler") // try to avoid directly concrete object inside the hadnler so needs to change the looger
-	d, err := ioutil.ReadAll(r.Body)
-	h.l.Printf("The data is %s\n", d)
+// ServeHTTP implements the go http.Handler interface
+// https://golang.org/pkg/net/http/#Handler
+func (h *Hello) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
+	h.l.Println("Handle Hello requests")
+
+	// read the body
+	b, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		http.Error(w, "oops Error", http.StatusBadRequest)
+		h.l.Println("Error reading body", err)
+
+		http.Error(rw, "Unable to read request body", http.StatusBadRequest)
 		return
 	}
-	fmt.Fprintf(w, "hello %s", d)
 
+	// write the response
+	fmt.Fprintf(rw, "Hello %s", b)
 }
