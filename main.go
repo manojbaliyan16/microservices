@@ -2,8 +2,6 @@ package main
 
 import (
 	"context"
-	"fmt"
-	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
@@ -14,23 +12,10 @@ import (
 )
 
 func main() {
-	// As we are going to use our own handler so below one will be commented
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		log.Println("Handling the client request and ready for Response ")
-		d, err := ioutil.ReadAll(r.Body)
-		if err != nil {
-			log.Println(http.StatusBadRequest)
-		}
-		fmt.Fprintf(w, "hello %s", d)
-
-	})
 	l := log.New(os.Stdout, "product-api", log.LstdFlags)
-	hh := handlers.NewHello(l)
-	gh := handlers.NewGoodbye(l)
-
+	ph := handlers.NewProducts(l)
 	sm := http.NewServeMux()
-	sm.Handle("/", hh)
-	sm.Handle("/goodbye", gh)
+	sm.Handle("/products", ph)
 
 	log.Println("Start the Server")
 	s := &http.Server{
