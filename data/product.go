@@ -3,14 +3,14 @@ package data
 import "time"
 
 type Product struct {
-	ID          int
-	Name        string
-	Description string
-	Price       float32
-	SKU         string
-	CreatedOn   string
-	UpdateOn    string
-	DeletionOn  string
+	ID          int     `json:"id"` // JSON as struct tag, add the JSON annotation, It will help us to change the better formatting like change the field name, omit the field or completely omit if it is completely empty
+	Name        string  `json:"name"`
+	Description string  `json:"description"`
+	Price       float32 `json:"price"`
+	SKU         string  `json:"sku"`
+	CreatedOn   string  `json:"_"`
+	UpdateOn    string  `json:"_"`
+	DeletionOn  string  `json:"_"`
 }
 
 func GetProducts() []*Product {
