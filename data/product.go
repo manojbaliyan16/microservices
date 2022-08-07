@@ -1,6 +1,10 @@
 package data
 
-import "time"
+import (
+	"encoding/json"
+	"io"
+	"time"
+)
 
 type Product struct {
 	ID          int     `json:"id"` // JSON as struct tag, add the JSON annotation, It will help us to change the better formatting like change the field name, omit the field or completely omit if it is completely empty
@@ -13,7 +17,16 @@ type Product struct {
 	DeletionOn  string  `json:"_"`
 }
 
-func GetProducts() []*Product {
+// Let's use the JSON Encoder instead if Marshal for that
+
+type Products []*Product
+
+func (p *Products) ToJSON(w io.Writer) error {
+	e := json.NewEncoder(w)
+	return e.Encode(p)
+}
+
+func GetProducts() Products {
 	return productList
 }
 

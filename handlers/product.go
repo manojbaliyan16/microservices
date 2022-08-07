@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"encoding/json"
 	"log"
 	"net/http"
 
@@ -19,14 +18,15 @@ func NewProducts(l *log.Logger) *Products {
 func (p *Products) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	//need to create a GET request which will return a product define in to product/product.go
 	log.Println("Going to handle products of all types ")
-	lp := data.GetProducts()       // here Lp is having the list of product now how can we return it to the user The way is to convert it(LP) into JSON can be done by using encoding JSON
-	bytes, err := json.Marshal(lp) // bytes--> slice of data
+	lp := data.GetProducts() // here Lp is having the list of product now how can we return it to the user The way is to convert it(LP) into JSON can be done by using encoding JSON
+	/*bytes, err := json.Marshal(lp) // bytes--> slice of data
 	if err != nil {
 		http.Error(w, "unable to marshal Json", http.StatusInternalServerError)
 	}
-	w.Write(bytes)
-	/*d, err := ioutil.ReadAll(r.Body)
-	if err!=nil{
+	w.Write(bytes)*/
+	err := lp.ToJSON(w)
+	if err != nil {
+		http.Error(w, "Unable to Encode", http.StatusInternalServerError)
+	}
 
-	}*/
 }
